@@ -35,12 +35,12 @@ small injectable abstraction used by tests to avoid real network calls.
 
 The assignment API is treated as a supplied mock/compliance endpoint.
 
-Debug builds use `AssignmentMockClient` as the HTTP transport because the
-supplied host is not reachable in the local assignment environment. It still
-passes through `ComplianceService`, including the exact endpoint, headers, and
-request body. It returns a verified status only for the supplied fixture values;
-other response data remains fail-closed. Release builds use a regular HTTP
-client for the supplied endpoint.
+Builds use `AssignmentMockClient` by default because the supplied host is not
+reachable in the local assignment environment. It still passes through
+`ComplianceService`, including the exact endpoint, headers, and request body.
+It returns a verified status only for the supplied fixture values; other
+response data remains fail-closed. To build against the real endpoint, opt in
+explicitly with `--dart-define=USE_ASSIGNMENT_MOCK=false`.
 
 - Method: `POST`
 - Endpoint: `https://api.habotconnect.com/v1/compliance/verify`
@@ -108,6 +108,13 @@ the supplied endpoint.
 ```bash
 flutter pub get
 flutter run
+```
+
+To build a release APK against the real compliance endpoint instead of the
+assignment fixture, run:
+
+```bash
+flutter build apk --release --dart-define=USE_ASSIGNMENT_MOCK=false
 ```
 
 Static analysis and formatting can be run with:

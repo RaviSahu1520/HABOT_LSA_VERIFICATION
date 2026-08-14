@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'controllers/verification_controller.dart';
 import 'screens/lsa_verification_screen.dart';
 import 'services/assignment_mock_client.dart';
 import 'services/compliance_service.dart';
+
+const _useAssignmentMock = bool.fromEnvironment(
+  'USE_ASSIGNMENT_MOCK',
+  defaultValue: true,
+);
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +30,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _httpClient = kDebugMode ? AssignmentMockClient.create() : http.Client();
+    _httpClient = _useAssignmentMock
+        ? AssignmentMockClient.create()
+        : http.Client();
     _complianceService = ComplianceService(client: _httpClient);
     _verificationController = VerificationController(
       service: _complianceService,
